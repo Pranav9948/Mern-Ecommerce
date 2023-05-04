@@ -6,16 +6,14 @@ import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
 import Navbars from "../Components/Navbars";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
+import { CartAction } from "../Redux/Actions/cartaction";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
-  const [qty,setQty]=useState('')
-
-
-
+  const [qty, setQty] = useState("");
 
   const { loading, Error, ProductDetails } = useSelector(
     (state) => state.productDetails
@@ -31,16 +29,11 @@ const ProductDetailsPage = () => {
     dispatch(ProductDetailsAction(id));
   }, []);
 
-const addtocarthandler=()=>{
-
-    console.log(('234'));
-
-    navigate(`/cart/${id}?qty=${qty}`)
-
-}
-
-
-
+ 
+  const addtocarthandler = () => {
+    console.log("okkkkmanh");
+    dispatch(CartAction(id, qty));
+  };
 
   return (
     <div>
@@ -75,32 +68,30 @@ const addtocarthandler=()=>{
               <ListGroup.Item className="flex">
                 Qty:{" "}
                 <span className="ms-8 font-bold">
-                  
-                <Form.Control as="select" value={qty} onChange={(e)=>setQty(e.target.value)}>
+                  <Form.Control
+                    as="select"
+                    value={qty}
+                    onChange={(e) => setQty(e.target.value)}
+                  >
+                    <option>Open this select menu</option>
 
-                <option>Open this select menu</option>
-
-                    {
-                        [...Array(productDetails?.countInStock).keys()].map((x)=>{
-
-                            return(
-
-                                
-                            <option value={x+1} key={x+1}>{x+1}</option>
-
-                            )
-                             
-                           })
-                        
-                    }
-
-                
-                </Form.Control>
-
+                    {[...Array(productDetails?.countInStock).keys()].map(
+                      (x) => {
+                        return (
+                          <option value={x + 1} key={x + 1}>
+                            {x + 1}
+                          </option>
+                        );
+                      }
+                    )}
+                  </Form.Control>
                 </span>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button className="bg-black text-white ms-4 mt-2 mb-2 text-center" onClick={()=>addtocarthandler()}>
+                <Button
+                  className="bg-black text-white ms-4 mt-2 mb-2 text-center"
+                  onClick={addtocarthandler}
+                >
                   Add to Cart
                 </Button>
               </ListGroup.Item>
